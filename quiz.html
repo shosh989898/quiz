@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>האם שווה לי לקנות את הבגד?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      direction: rtl;
+    }
+    .question {
+      display: none;
+    }
+    .question.active {
+      display: block;
+    }
+    button {
+      display: block;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>האם שווה לי לקנות את הבגד?</h2>
+
+  <div id="quiz"></div>
+  <div id="result" style="display:none;"></div>
+
+  <script>
+    const questions = [
+      {
+        text: "האם באמת הבגד הזה ישמש אותך הרבה?",
+        options: [
+          { text: "לא כל כך", score: 1 },
+          { text: "באמצע כזה כן ולא", score: 2 },
+          { text: "כןןן", score: 3 }
+        ]
+      },
+      {
+        text: "האם הבד נעים לך?",
+        options: [
+          { text: "לא כל כך", score: 1 },
+          { text: "באמצע כזה כן ולא", score: 2 },
+          { text: "כןןן", score: 3 }
+        ]
+      },
+      {
+        text: "האם השמלה נוחה לך?",
+        options: [
+          { text: "לא כל כך", score: 1 },
+          { text: "באמצע כזה כן ולא", score: 2 },
+          { text: "כןןן", score: 3 }
+        ]
+      },
+      {
+        text: "האם יש בה משהו מיוחד?",
+        options: [
+          { text: "לא כל כך", score: 1 },
+          { text: "באמצע כזה כן ולא", score: 2 },
+          { text: "כןןן", score: 3 }
+        ]
+      },
+      {
+        text: "האם היא יושבת עלייך יפה?",
+        options: [
+          { text: "לא כל כך", score: 1 },
+          { text: "באמצע כזה כן ולא", score: 2 },
+          { text: "כןןן", score: 3 }
+        ]
+      },
+      {
+        text: "האם זה משהו שלא תמצאי בארץ?",
+        options: [
+          { text: "לא כל כך", score: 1 },
+          { text: "באמצע כזה כן ולא", score: 2 },
+          { text: "כןןן", score: 3 }
+        ]
+      },
+      {
+        text: "האם אפשר לקנות אותה בארץ?",
+        options: [
+          { text: "כן", score: 1, goToEnd: true },
+          { text: "לא", score: 2 }
+        ]
+      },
+      {
+        text: "האם ההפרש מחירים משמעותי?",
+        options: [
+          { text: "לא", score: 1 },
+          { text: "כן", score: 2 }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let totalScore = 0;
+
+    const quizDiv = document.getElementById("quiz");
+    const resultDiv = document.getElementById("result");
+
+    function showQuestion(index) {
+      quizDiv.innerHTML = "";
+      const q = questions[index];
+      const questionDiv = document.createElement("div");
+      questionDiv.className = "question active";
+
+      const title = document.createElement("h3");
+      title.textContent = q.text;
+      questionDiv.appendChild(title);
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option.text;
+        btn.onclick = () => {
+          totalScore += option.score;
+          if (q === questions[6] && option.goToEnd) {
+            showResult();
+          } else if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+          } else {
+            showResult();
+          }
+        };
+        questionDiv.appendChild(btn);
+      });
+
+      quizDiv.appendChild(questionDiv);
+    }
+
+    function showResult() {
+      quizDiv.style.display = "none";
+      resultDiv.style.display = "block";
+      let message = "";
+      if (totalScore >= 8 && totalScore <= 12) {
+        message = "לקנות את הבגד במידה ועולה עד 55 פאונד (260 ש" + "ח)";
+      } else if (totalScore >= 13 && totalScore <= 17) {
+        message = "לקנות את הבגד במידה ועולה עד 75 פאונד (350 ש" + "ח)";
+      } else if (totalScore >= 18 && totalScore <= 23) {
+        message = "לקנות את הבגד במידה ועולה עד 95 פאונד (450 ש" + "ח)";
+      } else {
+        message = "לא נאספו מספיק נקודות למסקנה ברורה.";
+      }
+      resultDiv.innerHTML = `<h3>התוצאה שלך:</h3><p>${message}</p>`;
+    }
+
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>
